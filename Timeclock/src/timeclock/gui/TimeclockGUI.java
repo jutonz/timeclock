@@ -16,6 +16,7 @@ import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -41,7 +42,7 @@ import timeclock.core.Timeclock;
 import timeclock.core.Timespan;
 import timeclock.core.Workday;
 
-public class TimeclockGUI implements TableModelListener, ChangeListener {
+public class TimeclockGUI implements TableModelListener, ActionListener {
 	
 	/** Serves as the program's functional controller */
 	private Timeclock timeclock;
@@ -63,11 +64,7 @@ public class TimeclockGUI implements TableModelListener, ChangeListener {
 			private static final int START_COLUMN = 2;
 			private static final int END_COLUMN = 3;
 			private static final int HOURS_COLUMN = 4;
-		private JPanel hoursEditingPanel;
-			private Hashtable<Integer, JLabel> sliderLabelTable;
-			private JSlider startSlider;
-			private JLabel startSliderPositionLabel;
-			private JSlider endSlider;
+		private HoursEditingPanel hoursEditingPanel;
 	/** Houses components associated with switching between pay periods */
 	private JPanel payPeriodSwitchingPanel;
 		/** Pressed to indicate that the program should display information for the previous pay period. */
@@ -119,26 +116,8 @@ public class TimeclockGUI implements TableModelListener, ChangeListener {
 						
 				payDisplayPanel.add(hoursGridPanel, "gridPanel");
 				
-					hoursEditingPanel = new JPanel(new BorderLayout());
-					hoursEditingPanel.setBorder(BorderFactory.createTitledBorder("Edit Scheduled Hours"));
-					
-						createSliderLabelTable();
-					
-						startSlider = new JSlider(JSlider.HORIZONTAL, 0, 180, 20);
-						startSlider.setName("startSlider");
-						startSlider.addChangeListener(this);
-						startSlider.setLabelTable(sliderLabelTable);
-						startSlider.setMajorTickSpacing(10);
-						startSlider.setMinorTickSpacing(5);
-						startSlider.setPaintTicks(true);
-						startSlider.setPaintLabels(true);
-						startSlider.setSnapToTicks(true);
-					
-					hoursEditingPanel.add(startSlider, BorderLayout.CENTER);
-						
-						startSliderPositionLabel = new JLabel("0:00");
-						
-					hoursEditingPanel.add(startSliderPositionLabel, BorderLayout.NORTH);
+					hoursEditingPanel = new HoursEditingPanel();
+					hoursEditingPanel.addActionListener(this);
 						
 				payDisplayPanel.add(hoursEditingPanel, "editingPanel");
 				
@@ -258,91 +237,7 @@ public class TimeclockGUI implements TableModelListener, ChangeListener {
 				c.gridy++;
 				c.fill = GridBagConstraints.VERTICAL;
 				c.weighty = 1;
-			payPanel.add(filler, c);
-//				JPanel breakdownPanel = new JPanel();
-//					grossPay = "0";
-//					String[][] data = new String[][] {
-////							{"Gross Pay:", "$xxx"},
-////							{"Federal Income:", "$xxx"},
-////							{"State Income:", "$xxx"},
-////							{"Social Security:", "$xxx"},
-////							{"Medicare:", "$xxx"},
-//							{"Gross Pay:", "$" + grossPay}
-//						};
-//					String[] headers = {"", ""};
-//					JTable taxTable = new JTable(data, headers);
-//					taxTable.setShowGrid(false);
-//					taxTable.getTableHeader().setVisible(false);
-//					taxTable.setBackground(payPanel.getBackground());
-//					DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
-//					rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
-//					taxTable.getColumnModel().getColumn(0).setCellRenderer(rightRenderer);
-//					taxTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
-//						private static final long serialVersionUID = 1L;
-//						public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-//							JLabel parent = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-//							if (row == table.getRowCount() - 1) 
-//								parent.setFont(parent.getFont().deriveFont(Font.BOLD)); 
-//							return parent;  
-//						}
-//					});
-//					
-//				breakdownPanel.add(taxTable);
-//					
-//				c.gridx = 0;
-//				c.gridy = 2;
-//			payPanel.add(breakdownPanel, c);
-//			
-//				String netPay = "$xxxx";
-//				
-//				JLabel netPayLabel = new JLabel("Net Pay: " + netPay);
-//				Font defaultFont = netPayLabel.getFont();
-//				netPayLabel.setFont(new Font(defaultFont.getName(), defaultFont.getStyle(), 14));
-//				
-//				c.gridx = 0;
-//				c.gridy = 3;
-//			payPanel.add(netPayLabel, c);
-//		
-//			payPanel = new JPanel(new GridBagLayout());
-//			payPanel.setBorder(BorderFactory.createTitledBorder("Pay Breakdown"));
-//			
-//				GridBagConstraints c = new GridBagConstraints();
-//			
-//				String[][] data = new String[][] {
-//						{"Week 1:", "xx hours"},
-//						{"Week 2:", "xx hours"},
-//						{"Total:" , "xx hours"},
-//						{""       , ""}					
-//				};
-//				String[] headers = new String[] { "", "" };
-//				JTable weeklyHoursTable = new JTable(data, headers);
-//				weeklyHoursTable.setShowGrid(false);
-//				weeklyHoursTable.getTableHeader().setVisible(false);
-//				weeklyHoursTable.setBackground(payPanel.getBackground());
-//				DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
-//				rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
-//				weeklyHoursTable.getColumnModel().getColumn(0).setCellRenderer(rightRenderer);
-//			
-//				c.gridx = 0;
-//				c.gridy = 0;
-//			payPanel.add(weeklyHoursTable, c);
-//			
-//				data = new String[][] {
-//					{"Gross Pay:", "$xxx"},
-//					{"Federal Income:", "$xxx"},
-//					{"State Income:", "$xxx"},
-//					{"Social Security:", "$xxx"},
-//					{"Medicare:", "$xxx"}		
-//				};
-//				JTable taxTable = new JTable(data, headers);
-//				taxTable.setShowGrid(false);
-//				taxTable.getTableHeader().setVisible(false);
-//				taxTable.setBackground(payPanel.getBackground());
-//				taxTable.getColumnModel().getColumn(0).setCellRenderer(rightRenderer);
-//				
-//				c.gridx = 0;
-//				c.gridy = 1;
-//			payPanel.add(taxTable, c);			
+			payPanel.add(filler, c);	
 			
 		mainFrame.add(payPanel, BorderLayout.EAST);
 		
@@ -373,22 +268,8 @@ public class TimeclockGUI implements TableModelListener, ChangeListener {
 		//hoursTable.setBackground(hoursPanel.getBackground());
 	}
 	
-	private void createSliderLabelTable() {
-		sliderLabelTable = new Hashtable<Integer, JLabel>();
-		sliderLabelTable.put(0, new JLabel("5:00"));
-		sliderLabelTable.put(20, new JLabel("7:00"));
-		sliderLabelTable.put(40, new JLabel("9:00"));
-		sliderLabelTable.put(60, new JLabel("11:00"));
-		sliderLabelTable.put(80, new JLabel("1:00"));
-		sliderLabelTable.put(100, new JLabel("3:00"));
-		sliderLabelTable.put(120, new JLabel("5:00"));
-		sliderLabelTable.put(140, new JLabel("7:00"));
-		sliderLabelTable.put(160, new JLabel("9:00"));
-		sliderLabelTable.put(180, new JLabel("11:00"));
-	}
-	
 	private void loadTimeclockData() {
-		//Remove listener to avoid tracking automated table changes
+		// Remove listener to avoid tracking automated table changes
 		hoursTableModel.removeTableModelListener(this);
 		hoursTableModel.setRowCount(0);
 		LinkedList<Workday> workdays = timeclock.getWorkdays();
@@ -517,40 +398,60 @@ public class TimeclockGUI implements TableModelListener, ChangeListener {
         timeclock.getCurrentPayPeriod().updateWorkday(updatedWorkday);
 	}
 	
+	
+	/** 
+	 * This method is invoked when the user double clicks on the table,
+	 * which signifies that she wishes to edit the details of a Workday.
+	 * The GUI responds by switching away from the HoursTable and to the 
+	 * HoursEditingPanel, which will be displayed until the user finishes 
+	 * entering data. The GUI is informed of this by way of an ActionEvent,
+	 * which is handled in the actionPerformed method, below.
+	 * @param e
+	 */
 	public void tableDoubleClicked(MouseEvent e) {
-		CardLayout layout = (CardLayout) payDisplayPanel.getLayout();
-		layout.show(payDisplayPanel, "editingPanel");
-		String s = hoursTableModel.getValueAt(hoursTable.getSelectedRow(), DAY_COLUMN).toString();
+		Object src = e.getSource();
+		if (src == hoursTable) {
+			// Tell the editing panel which workday has been selected		
+			int selectedRow = hoursTable.getSelectedRow();
+			Object selectedTime = null;
+			while (selectedTime == null || selectedTime.toString().equals(""))
+				selectedTime = hoursTableModel.getValueAt(selectedRow--, DATE_COLUMN);
+			SimpleDate date = new SimpleDate(selectedTime.toString());
+			Workday w = timeclock.getWorkdayFromDate(date);
+			hoursEditingPanel.setWorkday(w);
+			
+			CardLayout layout = (CardLayout) payDisplayPanel.getLayout();
+			layout.removeLayoutComponent(hoursEditingPanel);
+			layout.addLayoutComponent(hoursEditingPanel, "editingPanel");
+			layout.show(payDisplayPanel, "editingPanel");
+		} 
 	}
 	
-	public void stateChanged(ChangeEvent e) {
-		JSlider source = (JSlider) e.getSource();
-		if (source.getName().equals("startSlider"))
-			source = startSlider;
-		if (!source.getValueIsAdjusting()) {
-			int pos = (int) source.getValue();
-			String time = getTimeFromSliderPos(pos);
-			startSliderPositionLabel.setText(time);
+	/**
+	 * This method is invoked by the HoursEditingPanel to inform
+	 * the GUI that the user has finished entering input. The GUI
+	 * is to respond by switching away from the HoursEditingPanel
+	 * and by processing data entered. 
+	 */
+	public void actionPerformed(ActionEvent e) {
+		Object src = e.getSource();
+		if (src == hoursEditingPanel) {
+			switch (e.getID()) {
+			case HoursEditingPanel.UPDATE_RESULT:
+				// Update the workday with the new information
+				Workday updatedWorkday = hoursEditingPanel.getWorkday();
+				timeclock.getCurrentPayPeriod().updateWorkday(updatedWorkday);
+				loadTimeclockData();
+				break;
+			case HoursEditingPanel.CANCEL_RESULT:
+				// Do stuff
+				break;
+			}
+			CardLayout layout = (CardLayout) payDisplayPanel.getLayout();
+			layout.show(payDisplayPanel, "gridPanel");
 		}
 	}
-	
-	public String getTimeFromSliderPos(int pos) {
-		String ret = "";
-		int hour;
-		int minute;		
-		if (pos < 80) {
-			//If before 1:00 
-			hour = 5 + (pos / 10);
-			minute = (pos % 10 == 0) ? 0 : 30;
-		} else {
-			//If after 1:00
-			hour = (pos - 70) / 10;
-			minute = (pos % 10 == 0) ? 0 : 30;
-		}
-		ret += hour + ":";
-		ret += (minute == 0) ? "00" : "30";
-		return ret;
-	}
+
 	
 	private void saveAndClose() {
 		timeclock.saveToFile();

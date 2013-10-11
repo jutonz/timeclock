@@ -35,6 +35,10 @@ public class Workday {
 		
 	}
 	
+	public void clearSchedule() {
+		schedule.clear();
+	}
+	
 	public void addHours(Timespan toAdd) {
 		schedule.add(toAdd);
 	}

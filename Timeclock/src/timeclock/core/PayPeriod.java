@@ -69,6 +69,14 @@ public class PayPeriod {
 		}
 	}
 	
+	public Workday getWorkdayFromDate(SimpleDate date) {
+		for (Workday w : schedule) {
+			if (w.getDate().equals(date))
+				return w;
+		}
+		return null;
+	}
+	
 	/**
 	 * If this PayPeriod contains a Workday of the same date as
 	 * the one passed, this method will combine their associated

@@ -65,6 +65,8 @@ public class SimpleDate {
 		c.set(Calendar.DAY_OF_YEAR, c.get(Calendar.DAY_OF_YEAR) - 1);
 		return new SimpleDate(c.get(Calendar.MONTH) + 1, c.get(Calendar.DATE), c.get(Calendar.YEAR));
 	}
+	
+
 
 	public int getMonth() {
 		return month;

@@ -131,6 +131,10 @@ public class Timeclock {
 	public LinkedList<Workday> getWorkdays() {
 		return schedule.get(index).getWorkdays();
 	}
+	
+	public Workday getWorkdayFromDate(SimpleDate date) {
+		return schedule.get(index).getWorkdayFromDate(date);
+	}
 
 	public double getPayrate() {
 		return payrate;

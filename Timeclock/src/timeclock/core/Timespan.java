@@ -1,5 +1,6 @@
 package timeclock.core;
 
+import java.util.Calendar;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -11,12 +12,19 @@ import java.util.Scanner;
  */
 public class Timespan {
 	
+	public static final double DEFAULT_START = 5.0;
+	public static final double DEFAULT_END = 11.0;
+	
 	private double start;
 	private double end;
 	
 	public Timespan(double start, double end) {
 		this.start = start;
 		this.end = end;
+	}
+	
+	public Timespan() {
+		this(DEFAULT_START, DEFAULT_END);
 	}
 	
 	public double getLength() {
@@ -26,6 +34,7 @@ public class Timespan {
 	public double getStart() {
 		return start;
 	}
+	
 	
 	public String getStartFormatted() {
 		double trimmed = start - (int) start;
@@ -46,6 +55,7 @@ public class Timespan {
 	public double getEnd() {
 		return end;
 	}
+
 	
 	public String getEndFormatted() {
 		double trimmed = end - (int) end;
