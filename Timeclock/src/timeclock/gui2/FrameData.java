@@ -15,11 +15,11 @@ public class FrameData {
     public static class Location {
         public static class X {
             public static final String NAME = "windowLocationX";
-            public static final int DEFAULT = 200;
+            public static final double DEFAULT = 200;
         }
         public static class Y {
             public static final String NAME = "windowLocationY";
-            public static final int DEFAULT = 200;
+            public static final double DEFAULT = 200;
         }
     }
 

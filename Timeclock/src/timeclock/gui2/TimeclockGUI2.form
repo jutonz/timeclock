@@ -21,7 +21,7 @@
             <properties/>
             <border type="line" title="Week 1"/>
             <children>
-              <component id="d5b91" class="javax.swing.JLabel">
+              <component id="d5b91" class="javax.swing.JLabel" binding="week1HoursWorkedLabel">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -48,7 +48,7 @@
             <properties/>
             <border type="line" title="Week 2"/>
             <children>
-              <component id="68ca5" class="javax.swing.JLabel" binding="week1HoursWorkedLabel">
+              <component id="68ca5" class="javax.swing.JLabel" binding="week2HoursWorkedLabel">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -66,6 +66,21 @@
               </component>
             </children>
           </grid>
+          <component id="1c7ba" class="javax.swing.JLabel" binding="grossPayLabel">
+            <constraints>
+              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="0.0" weighty="0.0"/>
+            </constraints>
+            <properties>
+              <text value="Gross Pay: $xxx"/>
+            </properties>
+          </component>
+          <vspacer id="8d1a5">
+            <constraints>
+              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="0.0" weighty="1.0"/>
+            </constraints>
+          </vspacer>
         </children>
       </grid>
       <grid id="4f981" binding="displayPanel" layout-manager="GridBagLayout">
@@ -89,7 +104,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="acdb8" class="javax.swing.JTable" binding="hoursTable">
+                  <component id="acdb8" class="javax.swing.JTable" binding="hoursTable" custom-create="true">
                     <constraints/>
                     <properties/>
                   </component>
@@ -114,7 +129,7 @@
                   <text value="&lt;"/>
                 </properties>
               </component>
-              <component id="6298b" class="javax.swing.JLabel">
+              <component id="6298b" class="javax.swing.JLabel" binding="payPeriodLabel">
                 <constraints>
                   <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>

@@ -1,46 +1,18 @@
 package timeclock.gui;
 
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Component;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.Dictionary;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.LinkedList;
-import java.util.NoSuchElementException;
-
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSlider;
-import javax.swing.JTable;
-import javax.swing.UIManager;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-
-import timeclock.core.PayPeriod;
 import timeclock.core.SimpleDate;
 import timeclock.core.Timeclock;
 import timeclock.core.Timespan;
 import timeclock.core.Workday;
+
+import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.LinkedList;
 
 public class TimeclockGUI implements TableModelListener, ActionListener {
 	
@@ -402,7 +374,7 @@ public class TimeclockGUI implements TableModelListener, ActionListener {
 	/** 
 	 * This method is invoked when the user double clicks on the table,
 	 * which signifies that she wishes to edit the details of a Workday.
-	 * The GUI responds by switching away from the HoursTable and to the 
+	 * The GUI responds by switching away from the HoursTableManager and to the
 	 * HoursEditingPanel, which will be displayed until the user finishes 
 	 * entering data. The GUI is informed of this by way of an ActionEvent,
 	 * which is handled in the actionPerformed method, below.

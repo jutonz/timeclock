@@ -1,5 +1,8 @@
 package timeclock.gui2;
 
+import timeclock.core.Timeclock;
+import timeclock.gui2.hoursTable.HoursTableManager;
+
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -10,6 +13,10 @@ import java.util.prefs.Preferences;
  * Date:   24 January 2014
  */
 public class TimeclockGUI2 {
+
+    private Timeclock timeclock;
+    private HoursTableManager hoursTableManager;
+
     private JFrame frame;
     private JPanel panel1;
     private JPanel infoPanel;
@@ -21,9 +28,12 @@ public class TimeclockGUI2 {
     private JButton previousPayPeriodButton;
     private JPanel navigationPanel;
     private JButton nextPayPeriodButton;
-    private JLabel week1HoursWorkedLabel;
+    private JLabel week2HoursWorkedLabel;
     private JButton addMarkoutWeek2Button1;
     private JTable hoursTable;
+    private JLabel grossPayLabel;
+    private JLabel week1HoursWorkedLabel;
+    private JLabel payPeriodLabel;
 
     public TimeclockGUI2() {
         frame = new JFrame("TimeclockGUI2");
@@ -40,6 +50,10 @@ public class TimeclockGUI2 {
                 loadFrameData();
             }
         });
+
+        // Load model data.
+        loadTimeclockData();
+
         frame.pack();
         frame.setVisible(true);
     }
@@ -54,8 +68,8 @@ public class TimeclockGUI2 {
         Preferences prefs = Preferences.userNodeForPackage(getClass());
 
         // Save window location.
-        prefs.put(FrameData.Location.X.NAME, frame.getLocation().getX() + "");
-        prefs.put(FrameData.Location.Y.NAME, frame.getLocation().getY() + "");
+        prefs.putDouble(FrameData.Location.X.NAME, frame.getLocation().getX());
+        prefs.putDouble(FrameData.Location.Y.NAME, frame.getLocation().getY());
 
         // Save window size.
         prefs.put(FrameData.Size.Height.NAME, frame.getWidth() + "");
@@ -72,9 +86,26 @@ public class TimeclockGUI2 {
         Preferences prefs = Preferences.userNodeForPackage(getClass());
 
         // Load window location.
-        int x = prefs.getInt(FrameData.Location.X.NAME, FrameData.Location.X.DEFAULT);
-        int y = prefs.getInt(FrameData.Location.Y.NAME, FrameData.Location.Y.DEFAULT);
+        int x = (int) prefs.getDouble(FrameData.Location.X.NAME, FrameData.Location.X.DEFAULT);
+        int y = (int) prefs.getDouble(FrameData.Location.Y.NAME, FrameData.Location.Y.DEFAULT);
         frame.setLocation(x, y);
+    }
+
+    private void loadTimeclockData() {
+        grossPayLabel.setText("Gross Pay: $" + timeclock.getGrossPay());
+        week1HoursWorkedLabel.setText("Hours Worked: " + timeclock.getWeekOneHoursWorked());
+        week2HoursWorkedLabel.setText("Hours Worked: " + timeclock.getWeekTwoHoursWorked());
+        payPeriodLabel.setText(timeclock.getCurrentStartString() + " to " + timeclock.getCurrentEndString());
+    }
+
+    private void createUIComponents() {
+        // Load the model.
+        timeclock = new Timeclock();
+        hoursTableManager = new HoursTableManager();
+
+        // Create the tables.
+        hoursTableManager.populateWith(timeclock.getWorkdays());
+        hoursTable = hoursTableManager.get();
     }
 
     public static void main(String[] args) {
